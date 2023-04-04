@@ -280,6 +280,12 @@ result = None
 # Make a constant:
 user_input = "Determine which next command to use, and respond using the format specified above:"
 
+# Initialize memory and make sure it is empty.
+# this is particularly important for indexing and referencing pinecone memory
+memory = mem.memory_factory()
+memory.clear()
+print('Using memory of type: ' + memory.__class__.__name__)
+
 # Interaction Loop
 while True:
     # Send message to AI, get response
@@ -288,7 +294,7 @@ while True:
             prompt,
             user_input,
             full_message_history,
-            mem.permanent_memory,
+            mem.memory_factory(),
             cfg.fast_token_limit) # TODO: This hardcodes the model to use GPT3.5. Make this an argument
 
     # print("assistant reply: "+assistant_reply)

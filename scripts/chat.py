@@ -41,7 +41,7 @@ def chat_with_ai(
             prompt (str): The prompt explaining the rules to the AI.
             user_input (str): The input from the user.
             full_message_history (list): The list of all messages sent between the user and the AI.
-            permanent_memory (list): The list of items in the AI's permanent memory.
+            permanent_memory (Obj): The memory object containing the permanent memory.
             token_limit (int): The maximum number of tokens allowed in the API call.
 
             Returns:
@@ -53,10 +53,15 @@ def chat_with_ai(
                 print(f"Token limit: {token_limit}")
             send_token_limit = token_limit - 1000
 
+            relevant_memory = permanent_memory.get_relevant(str(full_message_history[-5:]))
+
+            if debug:
+                print('Memory Stats: ', permanent_memory.get_stats())
+
             current_context = [
                 create_chat_message(
                     "system", prompt), create_chat_message(
-                    "system", f"Permanent memory: {permanent_memory}")]                
+                    "system", f"Permanent memory: {relevant_memory}")]
 
             # Add messages from the full message history until we reach the token limit
             next_message_to_add_index = len(full_message_history) - 1
